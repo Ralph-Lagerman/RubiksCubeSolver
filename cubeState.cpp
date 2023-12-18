@@ -1,26 +1,8 @@
 #include <string>
 #include <iostream>
-class cubeState{
+class cubeState{ 
+	friend struct hasher;
 	public:
-		//Constructor
-		cubeState(char cells[6][9], std::string moves){
-			for (int i = 0; i < 6; i++)
-				for (int j = 0; j < 9; j++)
-					this->cells[i][j] = cells[i][j];
-			this->moves = moves;
-			score = moves.length() + getDeviation();
-		}
-
-		//Accessor for correct path
-		std::string getMoves(){
-			return moves;
-		}
-
-		//Accessor for score
-		int getScore() {
-			return score;
-		}
-
 		//Debug Function
 		void print() {
 			for (int i = 0; i < 6; i++) {
@@ -31,7 +13,26 @@ class cubeState{
 				}
 			}
 		}
-		
+
+		//Constructor
+		cubeState(char cells[6][9], std::string moves){
+			for (int i = 0; i < 6; i++)
+				for (int j = 0; j < 9; j++)
+					this->cells[i][j] = cells[i][j];
+			this->moves = moves;
+			score = moves.length() + getDeviation();
+		}
+
+		//Accessor for correct path
+		std::string getMoves() const {
+			return moves;
+		}
+
+		//Accessor for score
+		int getScore() const {
+			return score;
+		}
+
 		//Method to determine if cube has been solved
 		bool isSolved(){
 			for(int i=0; i<6; i++)
@@ -105,11 +106,12 @@ class cubeState{
 					break;
 				}
 			}
+			score = moves.length() + getDeviation();
 		}
 
 
 		//Equality operator
-		bool operator==(const cubeState& other){
+		bool operator==(const cubeState& other) const{
 			for(int i=0; i<6; i++)
 				for(int j=0; j<9; j++)
 					if(this->cells[i][j] != other.cells[i][j]) return false;
@@ -156,7 +158,6 @@ class cubeState{
 
 		//Method to rotate cells adjacent to a face clockwise/counterclockwise
 		void rotate(int face, int direction) {
-			char temp;
 			//Determine adjacencent faces and specific cells within those faces
 			switch (face) {
 			case Up: {
