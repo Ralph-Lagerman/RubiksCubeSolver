@@ -1,15 +1,15 @@
 #include <string>
-#include <iostream>
+#include <cstdio>
 class cubeState{ 
 	friend struct hasher;
 	public:
 		//Debug Function
 		void print() {
 			for (int i = 0; i < 6; i++) {
-				std::cout << std::endl;
+				printf("\n");
 				for (int j = 0; j < 9; j++) {
-					if (j % 3 == 0) std::cout << std::endl;
-					std::cout << (int)cells[i][j] << " ";
+					if (j % 3 == 0) printf("\n");
+					printf(" %i",(int)cells[i][j]);
 				}
 			}
 		}
@@ -20,7 +20,7 @@ class cubeState{
 				for (int j = 0; j < 9; j++)
 					this->cells[i][j] = cells[i][j];
 			this->moves = moves;
-			score = moves.length() + getDeviation();
+			score = moves.length() + (getDeviation()/6);
 		}
 
 		//Accessor for correct path
@@ -106,7 +106,7 @@ class cubeState{
 					break;
 				}
 			}
-			score = moves.length() + getDeviation();
+			score = moves.length() + (getDeviation()/6);
 		}
 
 
@@ -203,7 +203,7 @@ class cubeState{
 		//Method to swap 12 specified cells from 4 specified faces
 		void swapCells(int faces[4], int cellsToSwap[4][3], int direction) {
 			char temp;
-			//Rotate 4 "groups" of cells
+			//Rotate 4 "groups" of cells clockwise
 			if (direction == 1) {
 				for (int i = 0; i < 3; i++) {
 					temp = cells[faces[0]][cellsToSwap[0][i]];
@@ -213,6 +213,7 @@ class cubeState{
 					cells[faces[1]][cellsToSwap[1][i]] = temp;
 				}
 			}
+			//Rotate 4 "groups" of cells counterclockwise
 			else if (direction == -1) {
 				for (int i = 0; i < 3; i++) {
 					temp = cells[faces[0]][cellsToSwap[0][i]];
