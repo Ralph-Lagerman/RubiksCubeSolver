@@ -20,7 +20,7 @@ class cubeState{
 				for (int j = 0; j < 9; j++)
 					this->cells[i][j] = cells[i][j];
 			this->moves = moves;
-			score = moves.length() + (getDeviation()/6);
+			score = moves.length() + getDeviation();
 		}
 
 		//Accessor for correct path
@@ -33,13 +33,38 @@ class cubeState{
 			return score;
 		}
 
+		//Method to detemine if bottom cross has been solved
+		bool cross() {
+			for (int i = 0; i < 4; i ++) {
+				//If cells adjacent to bottom center not equal -> cross not solved
+				if (cells[5][(2*i)+1] != cells[5][4]) return false;
+				//If sides not lined up -> cross not solved
+				if (cells[i][7] != cells[i][4]) return false;
+			}
+			return true;
+		}
+
+		//Method to determine if first two layers have been solved
+		bool f2l(){
+			//TODO : implement
+			return true;
+		}
+
+		//Method to detemine if top has been solved 
+		bool top() {
+			//TODO : implement
+			return true;
+		}
+
 		//Method to determine if cube has been solved
-		bool isSolved(){
+		bool solved(){
 			for(int i=0; i<6; i++)
 				for(int j=0; j<9; j++)
 					if(cells[i][j]!=cells[i][4]) return false;
 			return true;
 		}
+
+		//Method to determine if 
 
 		//Method to perform move based on input
 		void move(char c){
@@ -106,9 +131,8 @@ class cubeState{
 					break;
 				}
 			}
-			score = moves.length() + (getDeviation()/6);
+			score = moves.length() + getDeviation();
 		}
-
 
 		//Equality operator
 		bool operator==(const cubeState& other) const{

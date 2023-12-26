@@ -4,13 +4,16 @@
 #include<unordered_set>
 #include <iostream>
 
-std::string solveCube(char[6][9]);
+std::string solveCube(cubeState,bool(cubeState::*)());
 
 int main(){
+	//Storage for inputs
 	char cells[6][9];
 	char row[4];
 	char faceNames[6][7] = { "top", "left", "front", "right", "back", "bottom"};
 	char rowNames[3][7] = { "top", "middle", "bottom" };
+
+	//Loop to gather user input
 	for (int i = 0; i < 6; i++) {
 		for (int j = 0; j < 3; j++) {
 			printf("Enter %-7s face %-7s row :", faceNames[i], rowNames[j]);
@@ -20,9 +23,10 @@ int main(){
 			cells[i][3 * j + 2] = row[2];
 		}
 	}
-	std::string solution = solveCube(cells);
-	if (!solution.empty()) printf("Solution is : %s", solution.c_str());
-	else printf("No solution found");
+	cubeState initCube = cubeState(cells, "");
+	//Solve cross
+	std::string crossSln = solveCube(initCube, &cubeState::cross);
+	printf(crossSln.c_str());
 	return 0;
 }
 
@@ -45,8 +49,13 @@ bool operator<(const cubeState& a, const cubeState& b) {
 	return a.getScore() > b.getScore();
 }
 
-//A* Algorithm
-std::string solveCube(char cells[6][9]) {
+/// <summary>
+/// A* function
+/// </summary>
+/// <param name="begin"> Initial State of the cube </param>
+/// <param name="goal"> pointer to cubeState member function that indicates the desired state </param>
+/// <returns></returns>
+std::string solveCube(cubeState begin, bool(cubeState::*goal)()) {
 	int n = 0;
 	//Set up open set & closed set
 	char lastMove;
@@ -55,7 +64,7 @@ std::string solveCube(char cells[6][9]) {
 	std::unordered_set<cubeState, hasher> closedSet;
 
 	//Set up state variables
-	cubeState currentState(cells, "");
+	cubeState currentState = begin;
 	cubeState newState = currentState;
 	openSet.push(currentState);
 
@@ -65,7 +74,7 @@ std::string solveCube(char cells[6][9]) {
 		openSet.pop();
 		
 		//If the current state is the solved state return moves taken
-		if (currentState.isSolved()) return currentState.getMoves();
+		if ((currentState.*goal)()) return currentState.getMoves();
 
 		//If state is not in the closed set
 		if (closedSet.find(currentState) == closedSet.end()) {
