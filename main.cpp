@@ -23,10 +23,16 @@ int main(){
 			cells[i][3 * j + 2] = row[2];
 		}
 	}
-	cubeState initCube = cubeState(cells, "");
+	cubeState myCube = cubeState(cells, "");
 	//Solve cross
-	std::string crossSln = solveCube(initCube, &cubeState::cross);
-	printf(crossSln.c_str());
+	std::string crossSln = solveCube(myCube, &cubeState::cross);
+	printf("Cross : %s\n", crossSln.c_str());
+	for (char c : crossSln) myCube.move(c);
+
+	//Solve first layer
+	std::string firstSln = solveCube(myCube, &cubeState::first);
+	printf("First 2 Layers : %s\n", firstSln.c_str());
+	for (char c : firstSln.substr(crossSln.length())) myCube.move(c);
 	return 0;
 }
 

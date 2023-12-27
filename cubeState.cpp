@@ -44,9 +44,18 @@ class cubeState{
 			return true;
 		}
 
-		//Method to determine if first two layers have been solved
-		bool f2l(){
-			//TODO : implement
+		//Method to determine if first layer has been solved
+		bool first(){
+			//Check first layer on [left,front,right,back] faces
+			for (int i = 1; i < 5; i++) {
+				for (int j = 6; j < 9; j++) {
+					if (cells[i][j] != cells[i][4]) return false;
+				}
+			}
+			//Check bottom face
+			for (int i = 0; i < 9; i++) {
+				if (cells[5][i] != cells[5][4]) return false;
+			}
 			return true;
 		}
 
